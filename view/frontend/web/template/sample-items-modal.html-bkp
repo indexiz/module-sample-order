@@ -1,0 +1,111 @@
+<div class="popup-content">
+    <div id="indexiz-sample-popup" class="popup-container">
+        <div class="sample-items">
+            <h2>Your Sample Cart</h2>
+            <div class="sample-items-details">
+                <ul data-bind="foreach: { data: $data.samples, as: 'item' }">
+                    <li class="sample-item">
+                        <div class="cut-sample-image-inner ajax" data-bind="if: item.name">
+                            <div class="cut-sample-img-div">
+                                <a href="#" target="_self">
+                                    <img data-bind="attr: { src: item.image, alt: item.name }" class="sample-image" />
+                                    <div class="free-cut-sample-title">
+                                        <h5>
+                                            <span class="desktop" data-bind="text: item.name"></span> Sample
+                                            <!--<span class="mobile" data-bind="text: item.name"></span> Sample-->
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                            <a class="remove-sample-item"
+                               data-bind="click: function() { $parent.removeSampleFromCart(item.product_id) }">
+                                <div class="free-cut-sample-remove-button">
+                                    <span class="remove-text">Remove</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="cut-sample-image-inner add-image-inner sample-empty" data-bind="ifnot: item.name">
+                            <div class="free-cut-sample-plus-icon">
+                                <span>+</span>
+                            </div>
+                            <div class="free-cut-sample-add-another-text">
+                                <span>Add Free Sample</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <p class="items-count">You currently have <strong data-bind="text: $data.itemsCount"></strong> out of a maximum of 3, <strong>free cut samples</strong> in your Sample Cart.</p>
+        </div>
+        <div class="sample-delivery">
+            <div class="col-lg-5 col-md-5 free-cut-sample-detail">
+                <div class="border-mobile"></div>
+                <div class="free-cut-sample-detail-inner">
+                    <h3>Delivery Details</h3>
+                    <form data-bind="submit: submitForm" id="address-form-sample" name="deliveryDetails">
+                        <fieldset>
+                            <!-- First Name -->
+                            <p class="input-wrapper lg-half">
+                                <input type="text" id="shipping-first-name" class="require-entry"
+                                       data-bind="value: firstName, attr: { placeholder: 'First Name *', required: true }" />
+                            </p>
+
+                            <!-- Last Name -->
+                            <p class="input-wrapper lg-half">
+                                <input type="text" id="shipping-last-name" class="require-entry"
+                                       data-bind="value: lastName, attr: { placeholder: 'Last Name *', required: true }" />
+                            </p>
+
+                            <!-- Address 1 -->
+                            <p class="input-wrapper lg-half">
+                                <input type="text" id="address_1" class="require-entry"
+                                       data-bind="value: address1, attr: { placeholder: 'Address 1 *', required: true }" />
+                            </p>
+
+                            <!-- City -->
+                            <p class="input-wrapper lg-half">
+                                <input type="text" id="city" class="require-entry"
+                                       data-bind="value: city, attr: { placeholder: 'Town / City *', required: true }" />
+                            </p>
+
+                            <!-- Country -->
+                            <p class="input-wrapper lg-half">
+                                <input type="text" id="shipping-region" class="require-entry"
+                                       data-bind="value: country, attr: { placeholder: 'Country *', required: true }" />
+                            </p>
+
+                            <!-- Postcode -->
+                            <p class="input-wrapper lg-half postcode">
+                                <input type="text" id="zip" class="require-entry"
+                                       data-bind="value: zip, attr: { placeholder: 'Postcode *', required: true }" />
+                            </p>
+
+                            <!-- Telephone -->
+                            <p class="input-wrapper lg-half">
+                                <input type="tel" id="telephone" class="require-entry"
+                                       data-bind="value: telephone, attr: { placeholder: 'Telephone *', required: true }" />
+                            </p>
+
+                            <!-- Email -->
+                            <p class="input-wrapper lg-half">
+                                <input type="email" id="email" class="require-entry email"
+                                       data-bind="value: email, attr: { placeholder: 'Email *', required: true }" />
+                            </p>
+
+                            <!-- Order Comment -->
+                            <p class="input-wrapper lg-half" style="margin:10px;">
+                                <input type="checkbox" data-bind="checked: orderComment" id="order-comment" />
+                                <label for="order-comment">Would you like a sample video sent to your mobile?</label>
+                            </p>
+
+                            <!-- Submit Button -->
+                            <div class="btn-sample-request-main">
+                                <button type="submit" data-bind="enable: canRequestSamples" class="btn-sample-request">Request Samples</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

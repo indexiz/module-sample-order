@@ -1,0 +1,87 @@
+define([
+    "jquery",
+    "ko",
+    "mage/url"
+], function ($, ko, url) {
+    "use strict";
+
+    return function (config) {
+        var self = this;
+
+        // Sample items observable array
+        self.sampleItems = ko.observableArray(config.sampleItems || []);
+
+        // Add item to the sample cart
+        self.addItemToCart = function (productId) {
+            var data = {
+                product_id: productId
+            };
+
+            fetch(url.build("indexiz_sampleorder/index/sampleAdd"), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"  // Make sure Magento knows this is an AJAX request
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(function (response) {
+                    self.sampleItems(response.items);  // Update sample items
+                })
+                .catch(function (error) {
+                    console.error('Error adding item to cart:', error);
+                });
+        };
+
+        // Remove item from the sample cart
+        self.removeItemFromCart = function (itemId) {
+            var data = {
+                item_id: itemId
+            };
+
+            fetch(url.build("indexiz_sampleorder/index/sampleRemove"), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(function (response) {
+                    self.sampleItems(response.items);  // Update sample items
+                })
+                .catch(function (error) {
+                    console.error('Error removing item from cart:', error);
+                });
+        };
+
+        // Place the sample order
+        self.placeSampleOrder = function () {
+            fetch(url.build("indexiz_sampleorder/index/sampleOrder"), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then(response => response.json())
+                .then(function () {
+                    self.sampleItems([]);  // Clear items after order
+                    alert('Your sample order has been placed.');
+                })
+                .catch(function (error) {
+                    console.error('Error placing order:', error);
+                });
+        };
+
+        // Return the view model for Knockout.js binding
+        return {
+            sampleItems: self.sampleItems,
+            addItemToCart: self.addItemToCart,
+            removeItemFromCart: self.removeItemFromCart,
+            placeSampleOrder: self.placeSampleOrder
+        };
+    };
+});

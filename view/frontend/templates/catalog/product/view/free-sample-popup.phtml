@@ -1,0 +1,50 @@
+<?php
+
+use Indexiz\SampleOrder\ViewModel\Product\View\FreeSamplePopup;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var FreeSamplePopup $viewModel */
+
+$viewModel = $block->getViewModel();
+$canShowPopUp = $viewModel->canShowPopup();
+?>
+
+<div class="indexiz-sample-modal-default" data-bind="scope: 'indexizSampleViewModal'">
+
+    <!-- ko if: showFooterPopup -->
+    <div id="modal-content-pop-up-1" style="display: none;">
+        <a class="sample_pop_button" id="sample_pop_button" data-bind="click: showSampleQuoteItems">
+            <div id="sample-order-modal" class="modal-content-pop-up">
+                <div class="cut_samples_header cut_samples_head_open">
+                    <div class="cut_samples_header_squar_img">
+                        <img src="<?php echo $block->getViewFileUrl('Indexiz_SampleOrder::images/favlogo.png'); ?>" alt="cut sample">
+                    </div>
+                    <h2>Totally Free Samples!</h2>
+                    <span class="sample_book open_sample_book">
+                        <span class="sample_book_text">Open Your Sample Book</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="34" viewBox="0 0 48 48" width="36">
+                            <path d="M14.83 30.83l9.17-9.17 9.17 9.17 2.83-2.83-12-12-12 12z"></path>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <!-- /ko -->
+
+    <!--Sample View Modal-->
+    <div class="indexiz-sample-view-modal" style="display: none;">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout(); ?>
+    }
+}
+</script>
