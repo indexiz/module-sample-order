@@ -1,0 +1,104 @@
+<?php
+
+use Indexiz\SampleOrder\ViewModel\Product\View\FreeSampleButton;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var FreeSampleButton $viewModel */
+
+$cutsmapleSku = "";
+$cutsampleName = "";
+$fullsmapleSku = "";
+$fullsampleName = "";
+
+$viewModel = $block->getViewModel();
+$product = $viewModel->getCurrentProduct();
+$currentProductSku = $product->getSku();
+$currentProductType = $product->getTypeId();
+$hasSample = $product->getData('offer_sample');
+
+$sampleProduct = $viewModel->FreeCutSample();
+if ($sampleProduct != 'Not found') {
+    $cutsmapleSku = $sampleProduct['cut_product_sku'];
+    $cutsampleName = $sampleProduct['product_name'];
+}
+
+$FullsampleProduct = $viewModel->FullSizeSample();
+if ($FullsampleProduct != 'Not found') {
+    $fullsmapleSku = $FullsampleProduct['full_product_sku'];
+    $fullsampleName = $FullsampleProduct['product_name'];
+}
+
+$currentProductId = $product->getId();
+?>
+
+<div id="indexiz-add-sample-btn" style="visibility: hidden;" data-bind="scope: 'indexiz_sample_btn'">
+<!--Configurable Product-->
+<?php if ($currentProductType == 'configurable'): ?>
+    <?php if (!empty($hasSample)): ?>
+        <div class="sample-product-order" id="sample-product-order" data-bind="visible: showSampleButton">
+            <?php if ($currentProductSku) : ?>
+                <div class="cutt-sample">
+                    <a class="sample_button" id="cutt_sample_button"
+                       data-sku="<?php echo $currentProductId; ?>" data-name="<?php echo $cutsampleName; ?>" data-sample="<?php echo $hasSample;?>">FREE CUT SAMPLE</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+
+<!--Sample Products Button-->
+<?php if ($currentProductType == 'simple'): ?>
+    <?php if (!empty($hasSample)): ?>
+        <div class="sample-product-order" id="sample-product-order" data-bind="visible: showSampleButton">
+            <?php if ($currentProductSku) : ?>
+                <div class="cutt-sample">
+                    <a class="sample_button" id="cutt_sample_button"
+                       data-sku="<?php echo $currentProductId; ?>" data-name="<?php echo $cutsampleName; ?>">FREE CUT SAMPLE</a>
+                </div>
+            <?php endif; ?>
+            <?php if ($FullsampleProduct != 'Not found') : ?>
+                <div class="full-sample">
+                    <a class="sample_button" id="full_sample_button"
+                       data-sku="<?php echo $currentProductId; ?>" data-name="<?php echo $fullsampleName; ?>">FULL SIZE SAMPLE</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+    <input type="hidden" id="indexizClicksCount" value="0">
+    <!--Sample View Modal-->
+    <div class="indexiz-sample-items-modal" style="display: none;">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+</div>
+
+<script type="text/javascript">
+    require(
+        ['jquery'],
+        function ($) {
+            $(document).ready(function() {
+                document.getElementById('indexiz-add-sample-btn').style.visibility = 'visible';
+            });
+        }
+    );
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "indexiz_sample_btn": {
+                        "component": "Indexiz_SampleOrder/js/sampleproduct",
+                        "productId": <?= $currentProductId ?>,
+                        "hasSample": <?= !empty($hasSample) ? 'true' : 'false' ?>,
+                        "fullSampleProduct": <?= $FullsampleProduct !== 'Not found' ? 'true' : 'false' ?>
+                    }
+                }
+            }
+        }
+    }
+</script>

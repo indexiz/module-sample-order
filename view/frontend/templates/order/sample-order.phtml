@@ -1,0 +1,536 @@
+<?php
+/** @var Success $block */
+
+use Indexiz\SampleOrder\Block\Success;
+
+?>
+<?php
+$orderId = $block->getSampleOrderId();
+
+if (!empty($orderId)) {
+
+$order = $block->getOrderData($orderId);
+$address = $order->getBillingAddress();
+$getStreet = $address->getStreet();
+$postCode = $address->getPostcode();
+$city = $address->getCity();
+$telePhone = $address->getTelephone();
+$email = $order->getCustomerEmail();
+$getItems = $order->getItems();
+
+}
+else{
+
+    $script = "<script>
+window.location = '/404';</script>";
+echo $script;
+exit();
+
+}
+
+?>
+<!--<h1>Order Sample</h1>-->
+<?php if ($order): ?>
+<div data-v-97b52d14="" class="top" data-v-c3e4e786="">
+    <div data-v-97b52d14="" class="container mobile-container">
+        <div data-v-97b52d14="" class="row">
+            <div data-v-97b52d14="" class="col-md-8 col-sm-12 col-padding order-recieved">
+                <div data-v-97b52d14="" class="success-header">
+                    <div data-v-97b52d14="" class="col-md-12 col-lg-12 col-xs-12 success-heading">
+                        <p data-v-97b52d14="" class="order-received">Your Order Reference is:
+                            <label data-v-97b52d14="" class="order-num"><?= $order->getIncrementId(); ?></label></p>
+                    </div>
+                </div>
+                <div data-v-97b52d14="" class="cross-marketing-box">
+                   <!--  <h3 data-v-97b52d14="">Excellent choice!</h3>
+                    <p data-v-97b52d14=""> Now you've placed your order, how about a stylish new look for your bathroom at dream prices?</p> -->
+                    <a data-v-97b52d14="" href="#" target="_blank" class="img-box">
+                      
+                <img src="<?php echo $block->getViewFileUrl('Indexiz_SampleOrder::images/floor-tiles.jpeg'); ?>">
+                        <div data-v-97b52d14="" class="title">
+                            <i data-v-97b52d14="">tilesporcelain</i>.co.uk
+                        </div>
+                    </a>
+                </div>
+                <div data-v-97b52d14="" class="seccess-body">
+                    <div data-v-97b52d14="" class="col-md-12 inner-success">
+                           
+                        <span data-v-97b52d14="" class="order-info">Thank you for enquiring for samples, your samples will arrive in 1 - 3 working days.</span>
+                    </div>
+                </div>
+
+
+        
+              <!--   <div data-v-b968ef8e="" data-v-97b52d14="" class="container">
+                    <div data-v-b968ef8e="" class="things-to-remember">
+                        <h3 data-v-b968ef8e="">Delivery</h3>
+                        <p data-v-b968ef8e="" class="mbl-font">All our deliveries are ‘Kerbside Deliveries’. Your order will be delivered by a third-party courier on a pallet which is placed at the nearest accessible location.<br data-v-b968ef8e=""><br data-v-b968ef8e="">
+                            <span data-v-b968ef8e=""><a data-v-b968ef8e="" class="pointer" href="#">Click here</a></span> for more information on Kerbside Deliveries and find out what to expect on the day.
+                        </p>
+                    </div>
+                </div> -->
+            </div>
+            <div data-v-97b52d14="" class="col-md-4 col-padding account-create">
+<!--                <div data-v-1dafd4a9="" data-v-97b52d14="" class="container">-->
+<!--                    <div data-v-1dafd4a9="" class="coming-back-section">-->
+<!--                        <div data-v-1dafd4a9="">-->
+<!--                            <p data-v-1dafd4a9="" class="coming-back">Create your account</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div data-v-21a9a342="" data-v-97b52d14="" class="succes-order-review all-themes-same-component">
+                    <div data-v-21a9a342="" class="header-1">Order Review</div>
+                    <div data-v-21a9a342="" class="summary">
+                        <div data-v-21a9a342="" class="card">
+                            <div data-v-21a9a342="" class="card-row">
+                                <?php foreach ($getItems as $item): ?>
+                                <div data-v-21a9a342="" class="card-img-container col-xs-12">
+                                    <input type="hidden" name="hidden_pid" value="<?php echo $item->getProductId();?>">
+                                    <div data-v-21a9a342="" class="imginfo col-xs-6">
+                                        <label data-v-21a9a342="" class="product-img">Product</label>
+                                        <div data-v-a13d4482="" data-v-21a9a342="">
+                                            <?php
+                                                $productID = $item->getProductId();
+                                                $product = $block->getProductData($productID);
+                                                $productImg = $product->getImage();
+                                                $image_url = $block->imageHelper()->init($product, 'small_image')
+                                                ->setImageFile($product->getSmallImage())
+                                                ->resize(44, 44)
+                                                ->getUrl();
+                                            ?>
+                                            <img data-v-a13d4482="" class="card-img" src="<?php echo $image_url; ?>" />
+                                        </div>
+                                        <p data-v-21a9a342="" id="product-name"><?php echo $item->getName(); ?></p>
+                                    </div>
+                                    <div data-v-21a9a342="" class="card-price col-xs-3">
+                                        <label data-v-21a9a342="" class="product-img-qty">Qty</label>
+                                        <p data-v-21a9a342="" id="multiply-qty">x <?php echo number_format($item->getQtyOrdered(), 0);?></p>
+                                    </div>
+                                    <div data-v-21a9a342="" class="card-price col-xs-3">
+                                        <label data-v-21a9a342="" class="product-img-qty">Price</label>
+                                        <p data-v-21a9a342="" class="final-price">£<?php echo $item->getPrice(); ?></p>
+                                        <p data-v-21a9a342="" id="subtotal"></p>
+<!--                                        <p data-v-21a9a342="" id="multiply-qty1" class="">--><?php //echo $order->getGrandTotal();?><!--</p>-->
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-v-21a9a342="" class="summary-totals">
+                        <div data-v-21a9a342="" class="summary-totals-inner">
+                            <p data-v-21a9a342="">Subtotal</p>
+                            <p data-v-21a9a342="">£<?php echo number_format($order->getSubtotal(), 2); ?></p>
+                        </div> <!---->
+<!--                        <div data-v-21a9a342="" class="summary-totals-inner">-->
+<!--                            <p data-v-21a9a342="">Total Weight</p>-->
+<!--                            <p data-v-21a9a342="">0.20 KG</p>-->
+<!--                        </div>-->
+                        <div data-v-21a9a342="" class="summary-totals-inner">
+                            <p data-v-21a9a342="">Delivery</p>
+                            <p data-v-21a9a342=""><?php echo $order->getShippingDescription()?></p>
+                        </div>
+                        <div data-v-21a9a342="" class="summary-totals-inner grand-total-box">
+                            <p data-v-21a9a342="" class="total-price-text">Grand Total</p>
+                            <p data-v-21a9a342="" id="subtotalprice">£<?php echo number_format($order->getGrandTotal(), 2);?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    require([
+        'jquery',
+        'Magento_Customer/js/customer-data'
+    ], function ($,customerData) {
+        localStorage.clear();
+        // var sections = ['cart'];
+        // customerData.invalidate(sections);
+        // customerData.reload(sections, true);
+    });
+</script>
+<?php endif; ?>
+<style>
+.page-main > .page-title-wrapper{
+    text-align: center;
+    margin-top: 40px;
+}
+.page-main > .page-title-wrapper .page-title{
+    font-weight: 600;
+}
+    .top[data-v-97b52d14] {
+        margin-top: 35px;
+    }
+    p.order-received[data-v-97b52d14] {
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+        color: #fff;
+        font-family: Arial;
+        font-size: 24px;
+    }
+    label.order-num[data-v-97b52d14] {
+        color: #fff;
+        font-weight: 700;
+        font-size: 24px;
+    }
+    .mobile-container .row {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-wrap: wrap;
+        flex-wrap: nowrap;
+        margin-right: -8px;
+        margin-left: -8px;
+    }
+    .success-header[data-v-97b52d14] {
+           position: relative;
+    height: 57px;
+    padding: 0px;
+    background: #f0bf0f;
+    display: flex;
+    align-items: center;
+    }
+    .success-heading[data-v-97b52d14] {
+        color: #434343;
+    }
+    p.order-received[data-v-97b52d14] {
+        font-size: 24px;
+    }
+    label.order-num[data-v-97b52d14] {
+        color: #fff;
+        font-weight: 700;
+    }
+    .cross-marketing-box[data-v-97b52d14] {
+        margin-top: 24px;
+        text-align: center;
+    }
+    .cross-marketing-box h3[data-v-97b52d14] {
+        font-size: 24px;
+    }
+    .cross-marketing-box p[data-v-97b52d14] {
+        font-size: 12px;
+    }
+    .cross-marketing-box .img-box[data-v-97b52d14] {
+        display: block;
+    }
+    .cross-marketing-box .img-box img[data-v-97b52d14] {
+        width: 100%;
+        max-height: 456px;
+        height: auto;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
+    .cross-marketing-box .img-box .title[data-v-97b52d14] {
+        background: #f0bf0f;
+        color: #fff;
+        padding: 13px 0;
+        font-family: 'Arial', serif;
+        font-weight: 600;
+        font-size: 34px;
+    }
+    .seccess-body[data-v-97b52d14] {
+        padding: 36px 0 2px;
+        font-size: 24px;
+        color: #f0bf0f;
+        font-weight: bold;
+    }
+    .seccess-body span[data-v-97b52d14] {
+        display: block;
+        padding-bottom: 15px;
+        font-size: 24px;
+        font-family: Arial;
+    }
+    .seccess-body[data-v-97b52d14] {
+        padding: 36px 0 2px;
+        font-size: 24px;
+        color: #f0bf0f;
+        font-weight: bold;
+    }
+    .address-info[data-v-0a21c8c6] {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        background-color: #e1dde9;
+        margin-right: 0.5rem;
+        padding: 12px 11px 25px;
+    }
+    .shipping[data-v-0a21c8c6] {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        margin-left: 0.5rem;
+        background-color: #b7e6e2;
+        padding: 12px 11px 25px;
+    }
+    .address-info .delivery-info[data-v-0a21c8c6], .address-info .address-icon[data-v-0a21c8c6] {
+        float: left;
+        width: 50%;
+    }
+    .address-info img[data-v-0a21c8c6] {
+        float: right;
+        margin-top: 63px;
+    }
+    .shipping .shipping-detail[data-v-0a21c8c6] {
+        width: 60%;
+        padding-top: 13px;
+    }
+    .shipping .icon-box[data-v-0a21c8c6], .shipping .shipping-detail[data-v-0a21c8c6] {
+        float: left;
+    }
+    .shipping .icon-box[data-v-0a21c8c6] {
+        width: 40%;
+    }
+    .shipping img[data-v-0a21c8c6] {
+        float: right;
+        margin-top: 75px;
+    }
+    .things-to-remember[data-v-b968ef8e] {
+        margin-top: 25px;
+        padding-top: 25px;
+        margin-bottom: 30px;
+    }
+    .things-to-remember h3[data-v-b968ef8e] {
+        font-weight: 700;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 27px;
+        margin: 0px;
+        color: #f0bf0f;
+    }
+    .things-to-remember span[data-v-b968ef8e] {
+        text-decoration: underline;
+    }
+    .account-create[data-v-97b52d14] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .header-1[data-v-21a9a342] {
+        background-color: #f0bf0f;
+        color: #ffffff;
+        font-weight: 700;
+        padding: 15px 25px;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .summary[data-v-21a9a342] {
+        background-color: #fff;
+        border: 1px solid #cccccc;
+        border-bottom: 0;
+    }
+    .card-row[data-v-21a9a342] {
+        /*display: -ms-flexbox;*/
+        /*display: flex;*/
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .card-img-container[data-v-21a9a342] {
+        padding: 8px 9px 27px 17px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+    .imginfo.col-xs-6[data-v-21a9a342] {
+        padding-left: 1px;
+        -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+        max-width: 50%;
+    }
+    .product-img[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: left;
+        justify-content: left;
+        color: #494949;
+        font-size: 13.74px;
+        font-weight: bold;
+        padding-bottom: 15px;
+        padding-top: 28px;
+        font-family: Arial;
+    }
+    .card-img[data-v-a13d4482] {
+        /* height: 7rem; */
+        width: 44px;
+    }
+    p#product-name[data-v-21a9a342] {
+        color: #2a275c;
+        font-weight: bold;
+        margin-top: 19px;
+        font-size: 14px;
+        margin-bottom: 0;
+        font-family: Arial;
+    }
+    .card-price[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        position: relative;
+        -ms-flex-preferred-size: 25%;
+        flex-basis: 25%;
+        max-width: 25%;
+    }
+    .product-img-qty[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        color: #2a275c;
+        font-size: 13.74px;
+        font-weight: bold;
+        padding-bottom: 15px;
+        padding-top: 28px;
+        font-family: Arial;
+        margin-left: 0;
+    }
+    #multiply-qty[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        color: #2a275c;
+        -ms-flex-align: center;
+        align-items: center;
+        height: 100%;
+        margin: 0;
+        padding-top: 20px;
+        -ms-flex-pack: center;
+        justify-content: center;
+        font-family: Arial;
+        font-size: 14px;
+    }
+    .card-price .final-price[data-v-21a9a342] {
+        font-size: 14px;
+        display: -ms-flexbox;
+        display: flex;
+        color: #2a275c;
+        -ms-flex-align: end;
+        align-items: end;
+        height: 100%;
+        margin: 0;
+        margin-bottom: 31px;
+        -ms-flex-pack: center;
+        justify-content: center;
+        font-family: Arial;
+    }
+    p#subtotal[data-v-21a9a342] {
+        margin-bottom: 0;
+        margin-top: 0;
+        font-size: 12px;
+        color: #5c5c5c;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+    #multiply-qty1[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        font-size: 12px;
+        color: #5c5c5c;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        height: 18%;
+        margin: 0;
+        -ms-flex-pack: center;
+        justify-content: center;
+        font-family: Arial;
+    }
+    .summary-totals[data-v-21a9a342] {
+        background-color: #ffffff;
+        padding-bottom: 35px;
+    }
+    .summary-totals-inner[data-v-21a9a342] {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0 2.5rem 0 1rem;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 600;
+        border: 1px solid #cccccc;
+        border-bottom: 0;
+    }
+    .summary-totals-inner p[data-v-21a9a342] {
+        color: #59595b;
+        margin-top: 21px;
+        margin-bottom: 25px;
+    }
+    .summary-totals-inner[data-v-21a9a342]:last-child {
+        border: 1px solid #cccccc;
+    }
+    .grand-total-box p[data-v-21a9a342] {
+        font-weight: 700;
+        color: #2a275c;
+        font-size: 14px;
+    }
+    #subtotalprice[data-v-21a9a342] {
+        font-size: 20px;
+    }
+    @media (min-width: 991px){
+        .row-shipping[data-v-0a21c8c6] {
+            -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+        }
+        .col-lg-6.address-info {
+            -ms-flex-preferred-size: 50%;
+            flex-basis: 50%;
+            max-width: 50%;
+        }
+        .col-lg-6.shipping {
+            -ms-flex-preferred-size: 50%;
+            flex-basis: 50%;
+            max-width: 50%;
+        }
+    }
+
+    @media (min-width: 768px){
+        .order-recieved[data-v-97b52d14] {
+            padding-right: 70px;
+        }
+        .col-md-8.order-recieved {
+            -ms-flex-preferred-size: 66.66666667%;
+            flex-basis: 66.66666667%;
+            max-width: 66.66666667%;
+        }
+        .mbl-img[data-v-0a21c8c6] {
+            display: none;
+        }
+        p[data-v-b968ef8e] {
+            margin: 10px 0px;
+            color: #434343;
+            line-height: 1.6;
+            font-size: 18px;
+            font-family: Arial;
+        }
+        .col-md-4.account-create {
+            -ms-flex-preferred-size: 33.33333333%;
+            flex-basis: 33.33333333%;
+            max-width: 33.33333333%;
+        }
+    }
+    @media (max-width: 767px){
+        .mobile-container .row {
+            flex-wrap: wrap;
+        }
+        .col-md-4.account-create {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+        .col-md-8.order-recieved {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+    }
+</style>
